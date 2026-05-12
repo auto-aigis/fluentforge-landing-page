@@ -39,47 +39,31 @@ interface HowItWorksStep {
 
 const pricingTiers: PricingTier[] = [
   {
-    name: "Starter",
-    price: "$19",
-    description: "Perfect for getting started",
+    name: "Free",
+    price: "$0",
+    description: "Perfect to get started",
     features: [
-      "50 rewrites per month",
-      "Basic explanations",
-      "Email support",
-      "Community access",
+      "5 rewrites per day",
+      "Basic before/after output",
+      "Micro-lesson explanations",
+      "No credit card required",
     ],
-    buttonText: "Start Free Trial",
+    buttonText: "Get Started Free",
     highlighted: false,
   },
   {
-    name: "Professional",
-    price: "$49",
-    description: "Most popular for professionals",
+    name: "Pro",
+    price: "$5",
+    description: "For serious fluency learners",
     features: [
-      "Unlimited rewrites",
-      "Detailed coaching insights",
-      "Priority email support",
-      "Advanced tone analysis",
-      "Custom vocabulary lists",
-      "Progress tracking",
+      "Unlimited rewrites per day",
+      "Full micro-lesson explanations",
+      "Rewrite history (last 30 sessions)",
+      "Priority processing",
+      "Month-to-month billing, cancel anytime",
     ],
-    buttonText: "Get Started",
+    buttonText: "Upgrade to Pro",
     highlighted: true,
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    description: "For teams and organizations",
-    features: [
-      "Team management",
-      "Custom training materials",
-      "Dedicated support",
-      "API access",
-      "Team analytics",
-      "SSO integration",
-    ],
-    buttonText: "Contact Sales",
-    highlighted: false,
   },
 ];
 
@@ -138,7 +122,7 @@ const howItWorks: HowItWorksStep[] = [
 ];
 
 export default function LandingPage(): JSX.Element {
-  const [activeTab, setActiveTab] = useState<string>("professional");
+  const [activeTab, setActiveTab] = useState<string>("free");
   const [email, setEmail] = useState<string>("");
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -153,7 +137,6 @@ export default function LandingPage(): JSX.Element {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
-      {/* Navigation */}
       <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-sm z-50 border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -171,11 +154,17 @@ export default function LandingPage(): JSX.Element {
               Pricing
             </a>
           </div>
-          <Button className="bg-blue-600 hover:bg-blue-700">Sign In</Button>
+          <div className="flex gap-2">
+            <Button asChild variant="outline" className="hidden sm:inline-flex">
+              <a href="/apps/fluentforge/login">Sign In</a>
+            </Button>
+            <Button asChild className="bg-blue-600 hover:bg-blue-700">
+              <a href="/apps/fluentforge/register">Sign Up</a>
+            </Button>
+          </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">
@@ -191,11 +180,14 @@ export default function LandingPage(): JSX.Element {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Button
+              asChild
               size="lg"
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >
-              Start Free Trial
-              <ArrowRight className="ml-2 w-4 h-4" />
+              <a href="/apps/fluentforge/register">
+                Try Free
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </a>
             </Button>
             <Button
               size="lg"
@@ -211,15 +203,13 @@ export default function LandingPage(): JSX.Element {
               <div>
                 <p className="font-semibold text-slate-700 mb-2">Before:</p>
                 <p className="text-slate-700 italic">
-                  &quot;I am writing to you for expressing my interest in the position
-                  of software engineer in your esteemed company.&quot;
+                  &quot;Please do the needful at your earliest convenience.&quot;
                 </p>
               </div>
               <div>
                 <p className="font-semibold text-slate-700 mb-2">After:</p>
                 <p className="text-slate-700 italic">
-                  &quot;I am writing to express my interest in the software engineer
-                  position at your company.&quot;
+                  &quot;Please take care of this when you have a chance.&quot;
                 </p>
               </div>
             </div>
@@ -227,7 +217,6 @@ export default function LandingPage(): JSX.Element {
         </div>
       </section>
 
-      {/* Features Section */}
       <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -259,7 +248,6 @@ export default function LandingPage(): JSX.Element {
         </div>
       </section>
 
-      {/* How It Works Section */}
       <section
         id="how-it-works"
         className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50"
@@ -294,7 +282,6 @@ export default function LandingPage(): JSX.Element {
         </div>
       </section>
 
-      {/* Pricing Section */}
       <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -306,13 +293,12 @@ export default function LandingPage(): JSX.Element {
             </p>
           </div>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-12">
-              <TabsTrigger value="starter">Starter</TabsTrigger>
-              <TabsTrigger value="professional">Professional</TabsTrigger>
-              <TabsTrigger value="enterprise">Enterprise</TabsTrigger>
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12">
+              <TabsTrigger value="free">Free</TabsTrigger>
+              <TabsTrigger value="pro">Pro</TabsTrigger>
             </TabsList>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {pricingTiers.map((tier: PricingTier, index: number) => (
                 <TabsContent
                   key={index}
@@ -322,7 +308,7 @@ export default function LandingPage(): JSX.Element {
                   <Card
                     className={`p-8 border transition-all ${
                       tier.highlighted
-                        ? "border-blue-600 shadow-lg scale-105"
+                        ? "border-blue-600 shadow-lg ring-2 ring-blue-100"
                         : "border-slate-200"
                     }`}
                   >
@@ -344,13 +330,16 @@ export default function LandingPage(): JSX.Element {
                       )}
                     </div>
                     <Button
+                      asChild
                       className={`w-full mb-8 ${
                         tier.highlighted
                           ? "bg-blue-600 hover:bg-blue-700 text-white"
                           : "bg-slate-100 text-slate-900 hover:bg-slate-200"
                       }`}
                     >
-                      {tier.buttonText}
+                      <a href={tier.highlighted ? "/apps/fluentforge/pricing" : "/apps/fluentforge/register"}>
+                        {tier.buttonText}
+                      </a>
                     </Button>
                     <ul className="space-y-4">
                       {tier.features.map((feature: string, featureIndex: number) => (
@@ -368,7 +357,6 @@ export default function LandingPage(): JSX.Element {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-blue-700">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
@@ -378,19 +366,11 @@ export default function LandingPage(): JSX.Element {
             Join thousands of non-native English speakers improving their fluency
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={handleEmailChange}
-              className="flex-1 px-4 py-3 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full"
-            />
-            <Button
-              onClick={handleEmailSubmit}
-              className="bg-white text-blue-600 hover:bg-blue-50 font-semibold"
-            >
-              Get Started
-              <ArrowRight className="ml-2 w-4 h-4" />
+            <Button asChild className="bg-white text-blue-600 hover:bg-blue-50 font-semibold w-full">
+              <a href="/apps/fluentforge/register">
+                Get Started
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </a>
             </Button>
           </div>
           <p className="text-sm text-blue-100 mt-4">
@@ -399,7 +379,6 @@ export default function LandingPage(): JSX.Element {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="bg-slate-900 text-slate-400 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
