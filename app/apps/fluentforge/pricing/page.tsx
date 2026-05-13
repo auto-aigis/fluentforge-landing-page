@@ -50,7 +50,10 @@ export default function PricingPage() {
               token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
               eventCallback: (data: any) => {
                 if (data.name === "checkout.completed") {
-                  router.push("/apps/fluentforge?checkout=success");
+                  if (window.Paddle?.Checkout?.close) {
+                    window.Paddle.Checkout.close();
+                  }
+                  window.location.href = "/apps/fluentforge?checkout=success";
                 }
               },
             });
