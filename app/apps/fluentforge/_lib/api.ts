@@ -88,6 +88,14 @@ export const authApi = {
     apiFetch<Subscription>("/api/auth/subscription"),
 };
 
+export const paddleApi = {
+  verifyTransaction: (transaction_id: string) =>
+    apiFetch<{ status: string; tier: string }>("/api/paddle/verify-transaction", {
+      method: "POST",
+      body: JSON.stringify({ transaction_id }),
+    }),
+};
+
 export const rewriteApi = {
   rewrite: (text: string) =>
     apiFetch<RewriteResponse>("/api/rewrite", {

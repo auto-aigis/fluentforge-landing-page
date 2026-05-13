@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Menu, X, LogOut, Settings, BarChart3 } from "lucide-react";
-import { authApi, rewriteApi, User, UsageResponse } from "./_lib/api";
+import { authApi, rewriteApi, paddleApi, User, UsageResponse } from "./_lib/api";
 
 function DashboardContent() {
   const router = useRouter();
@@ -23,26 +23,39 @@ function DashboardContent() {
     const checkoutSuccess = searchParams?.get("checkout");
     if (checkoutSuccess === "success") {
       setIsPolling(true);
-      const pollSubscription = setInterval(async () => {
-        try {
-          const me = await authApi.me();
-          if (me.subscription_status === "active") {
+      const transactionId = searchParams?.get("transaction_id");
+
+      const activate = async () => {
+        if (transactionId) {
+          try {
+            await paddleApi.verifyTransaction(transactionId);
             setIsPolling(false);
-            clearInterval(pollSubscription);
             router.replace("/apps/fluentforge");
+            return;
+          } catch (err) {
+            console.error("Verify transaction error:", err);
           }
-        } catch (err) {
-          console.error("Polling error:", err);
         }
-      }, 2000);
-      const timeout = setTimeout(() => {
-        clearInterval(pollSubscription);
-        setIsPolling(false);
-      }, 40000);
-      return () => {
-        clearInterval(pollSubscription);
-        clearTimeout(timeout);
+
+        const pollSubscription = setInterval(async () => {
+          try {
+            const me = await authApi.me();
+            if (me.subscription_status === "active") {
+              setIsPolling(false);
+              clearInterval(pollSubscription);
+              router.replace("/apps/fluentforge");
+            }
+          } catch (err) {
+            console.error("Polling error:", err);
+          }
+        }, 2000);
+        setTimeout(() => {
+          clearInterval(pollSubscription);
+          setIsPolling(false);
+        }, 40000);
       };
+
+      activate();
     }
   }, [searchParams, router]);
 
